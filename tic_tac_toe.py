@@ -12,7 +12,7 @@ import poc_simpletest
 import poc_ttt_provided as provided
 
 # Constants for Monte Carlo simulator
-NTRIALS = 1          # Number of trials to run
+NTRIALS = 1000       # Number of trials to run
 SCORE_CURRENT = 1.0  # Score for squares played by the current player
 SCORE_OTHER = 1.0    # Score for squares played by the other player
 
@@ -83,11 +83,12 @@ def mc_move(board, player, trials):
     Use a Monte Carlo simulation to return a move for the specified player
     """
     if trials > 0:
-        scores = [[0 for dummy_i in range(board.get_dim())]]
+        scores = [[0 for dummy_i in range(board.get_dim())] for dummy_j in range(board.get_dim())]
 
         for dummy_i in range(trials):
-            mc_trial(board, player)
-            mc_update_scores(scores, board, player)
+            cloned_board = board.clone()
+            mc_trial(cloned_board, player)
+            mc_update_scores(scores, cloned_board, player)
 
         best_move = get_best_move(board, scores)
 
@@ -273,7 +274,17 @@ def test_mc_move():
     """
     suite = poc_simpletest.TestSuite()
 
-    board = provided.TTTBoard(3)
+    board = provided.TTTBoard(
+        3,
+        False,
+        [
+            [provided.PLAYERX, provided.PLAYERX, provided.PLAYERO],
+            [provided.EMPTY, provided.PLAYERX, provided.PLAYERX],
+            [provided.PLAYERO, provided.EMPTY, provided.PLAYERO]
+        ]
+    )
+
+    mc_move(board, provided.PLAYERO, NTRIALS)
 
     suite.report_results()
 
