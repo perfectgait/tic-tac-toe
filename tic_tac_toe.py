@@ -8,7 +8,7 @@ __version__ = "1.0"
 
 import random
 import poc_simpletest
-# import poc_ttt_gui
+import poc_ttt_gui
 import poc_ttt_provided as provided
 
 # Constants for Monte Carlo simulator
@@ -288,5 +288,5 @@ test_mc_update_scores()
 test_get_best_move()
 test_mc_move()
 
-# provided.play_game(mc_move, NTRIALS, False)        
+# provided.play_game(mc_move, NTRIALS, False)
 # poc_ttt_gui.run_gui(3, provided.PLAYERX, mc_move, NTRIALS, False)
