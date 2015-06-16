@@ -24,7 +24,7 @@ def mc_trial(board, player):
     while True:
         empty_squares = board.get_empty_squares()
 
-        if len(empty_squares) == 0:
+        if len(empty_squares) == 0 or board.check_win() is not None:
             break
 
         empty_square = random.choice(empty_squares)
@@ -102,30 +102,22 @@ def test_mc_trial():
     suite = poc_simpletest.TestSuite()
 
     board = provided.TTTBoard(3)
-    dimension = board.get_dim()
-    filled_squares = 0
 
     mc_trial(board, provided.PLAYERX)
 
-    for row in range(0, dimension):
-        for col in range(0, dimension):
-            if board.square(row, col) == provided.PLAYERO or board.square(row, col) == provided.PLAYERX:
-                filled_squares += 1
-
-    suite.run_test(filled_squares, dimension * dimension)
+    if board.check_win() is not None:
+        suite.run_test(True, True)
+    else:
+        suite.run_test(False, True)
 
     board = provided.TTTBoard(5)
-    dimension = board.get_dim()
-    filled_squares = 0
 
     mc_trial(board, provided.PLAYERX)
 
-    for row in range(0, dimension):
-        for col in range(0, dimension):
-            if board.square(row, col) == provided.PLAYERO or board.square(row, col) == provided.PLAYERX:
-                filled_squares += 1
-
-    suite.run_test(filled_squares, dimension * dimension)
+    if board.check_win() is not None:
+        suite.run_test(True, True)
+    else:
+        suite.run_test(False, True)
 
     suite.report_results()
 
@@ -284,7 +276,9 @@ def test_mc_move():
         ]
     )
 
-    mc_move(board, provided.PLAYERO, NTRIALS)
+    move = mc_move(board, provided.PLAYERO, NTRIALS)
+
+    suite.run_test(move, (2, 1))
 
     suite.report_results()
 
